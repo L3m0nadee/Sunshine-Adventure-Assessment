@@ -1,24 +1,28 @@
 import tkinter as tk
+from tkinter import ttk
 
-class Sunshine_Adventure:
+class GroupApplication:
     # Constants
     MIN_GROUP_MEMBERS = 5
     MAX_GROUP_MEMBERS = 10
+
+    
 
     def __init__(self, root):
         self.root = root
         self.root.title("Sunshine Adventure Camp Program")
         self.group_data = []
 
+
         # Group Name
-        self.group_name_label = tk.Label(root, text="Group Name:")
+        self.group_name_label = tk.Label(root, text="Group Leader:")
         self.group_name_label.grid(row=0, column=0, padx=5, pady=5)
         self.group_name = tk.StringVar()
         self.group_name_entry = tk.Entry(root, textvariable=self.group_name)
         self.group_name_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        # Can Move
-        self.can_move_label = tk.Label(root, text="Can Group Move?")
+
+        self.can_move_label = tk.Label(root, text="Staying in location?")
         self.can_move_label.grid(row=1, column=0, padx=5, pady=5)
         self.can_move = tk.StringVar(value="Yes")
         self.can_move_menu = tk.OptionMenu(root, self.can_move, "Yes", "No")
@@ -32,10 +36,10 @@ class Sunshine_Adventure:
         self.location_entry.grid(row=2, column=1, padx=5, pady=5)
 
         # Weather
-        self.weather_label = tk.Label(root, text="Weather Conditions:")
+        self.weather_label = tk.Label(root, text="Weather:")
         self.weather_label.grid(row=3, column=0, padx=5, pady=5)
         self.weather = tk.StringVar(value="Sunny")
-        self.weather_menu = tk.OptionMenu(root, self.weather, "Sunny", "Rainy", "Snowy", "Humid", "Windy", "Stormy", "Cloudy")
+        self.weather_menu = tk.OptionMenu(root, self.weather, "Sunny", "Rainy", "Snowy", "Humid", "Windy", "Stormy", "Partly Cloudy")
         self.weather_menu.grid(row=3, column=1, padx=5, pady=5)
 
         # Group Members
@@ -67,6 +71,7 @@ class Sunshine_Adventure:
         self.output_box = tk.Text(root, height=10, width=50)
         self.output_box.grid(row=7, column=0, columnspan=4, padx=5, pady=5)
 
+    
     # Actions
     def continue_action(self):
         group_name = self.group_name.get()
@@ -118,6 +123,29 @@ class Sunshine_Adventure:
             self.output_box.insert(tk.END, f"Weather Conditions: {group['weather']}\n")
             self.output_box.insert(tk.END, f"Number of Group Members: {group['group_members']}\n\n")
 
+    def done_action(self):
+        # Clear the output box
+        self.output_box.delete('1.0', tk.END)
+
+        # Create the treeview widget
+        treeview = ttk.Treeview(self.root, columns=["group_name", "can_move", "location", "weather", "group_members"])
+        treeview.heading("#0", text="Group #")
+        treeview.heading("group_name", text="Group Leader")
+        treeview.heading("can_move", text="Staying in location?")
+        treeview.heading("location", text="Location")
+        treeview.heading("weather", text="Weather")
+        treeview.heading("group_members", text="Number of Group Members")
+
+        # Add the group data to the treeview
+        for i, group in enumerate(self.group_data, 1):
+            treeview.insert("", "end", text=str(i), values=(group["group_name"], group["can_move"], group["location"], group["weather"], group["group_members"]))
+
+        # Display the treeview
+        treeview.grid(row=7, column=0, columnspan=4, padx=5, pady=5)
+
+        # Clear the group data
+        self.group_data = []
+
 root = tk.Tk()
-app = Sunshine_Adventure(root)
+app = GroupApplication(root)
 root.mainloop()
