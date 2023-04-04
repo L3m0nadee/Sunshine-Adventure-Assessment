@@ -123,27 +123,6 @@ class GroupApplication:
             self.output_box.insert(tk.END, f"Weather Conditions: {group['weather']}\n")
             self.output_box.insert(tk.END, f"Number of Group Members: {group['group_members']}\n\n")
 
-    def done_action(self):
-        # Clear the output box
-        self.output_box.delete('1.0', tk.END)
-
-        # Create the treeview widget
-        treeview = ttk.Treeview(self.root, columns=["group_name", "can_move", "location", "weather", "group_members"])
-        treeview.heading("#0", text="Group #")
-        treeview.heading("group_name", text="Group Leader")
-        treeview.heading("can_move", text="Staying in location?")
-        treeview.heading("location", text="Location")
-        treeview.heading("weather", text="Weather")
-        treeview.heading("group_members", text="Number of Group Members")
-
-        # Add the group data to the treeview
-        for i, group in enumerate(self.group_data, 1):
-            treeview.insert("", "end", text=str(i), values=(group["group_name"], group["can_move"], group["location"], group["weather"], group["group_members"]))
-
-        # Display the treeview
-        treeview.grid(row=7, column=0, columnspan=4, padx=5, pady=5)
-
-        # Clear the group data
         self.group_data = []
 
 root = tk.Tk()
